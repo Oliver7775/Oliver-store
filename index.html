@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>متجر وهمي</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to bottom right, #333, #111);
+            overflow: hidden;
+        }
+
+        /* صفحة تسجيل الدخول */
+        .login-page {
+            background-color: #1a1a1a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: white;
+            text-align: center;
+        }
+
+        .login-page input {
+            display: block;
+            margin: 10px auto;
+            padding: 10px;
+            width: 250px;
+            border: 2px solid #444;
+            border-radius: 5px;
+            background-color: #222;
+            color: white;
+        }
+
+        .login-page input[type="button"] {
+            background-color: #ff5733;
+            color: white;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .login-page input[type="button"]:hover {
+            background-color: #ff4500;
+        }
+
+        .error {
+            color: red;
+            margin-top: 10px;
+        }
+
+        /* الصفحة الرئيسية للموقع (المتجر) */
+        .black-page {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            background-color: #111;
+            overflow: hidden;
+            display: none;
+        }
+
+        .store {
+            text-align: center;
+            padding: 20px;
+            color: white;
+            position: relative;
+        }
+
+        .product {
+            display: inline-block;
+            background-color: #222;
+            margin: 15px;
+            padding: 20px;
+            border-radius: 10px;
+            width: 250px;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .product:hover {
+            transform: scale(1.05);
+        }
+
+        .product img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .product h3 {
+            font-size: 18px;
+            color: #ff5733;
+        }
+
+        .product p {
+            color: #ddd;
+            font-size: 14px;
+        }
+
+        .product button {
+            background-color: #ff5733;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .product button:hover {
+            background-color: #ff4500;
+        }
+
+        .cart {
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #333;
+            border-radius: 10px;
+            width: 80%;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #555;
+        }
+
+        .cart-total {
+            font-size: 20px;
+            margin-top: 10px;
+        }
+
+        .checkout {
+            margin-top: 20px;
+        }
+
+        .checkout button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .checkout button:hover {
+            background-color: #45a049;
+        }
+
+        /* نافذة سلة التسوق القديمة (لتحديد العدد) */
+        .cart-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #222;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+        }
+
+        /* نافذة الدفع */
+        .payment-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #222;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+        }
+
+        .payment-popup button {
+            background-color: #ff5733;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .payment-popup button:hover {
+            background-color: #ff4500;
+        }
+
+        .bitcoin-icon {
+            width: 50px;
+            height: 50px;
+            margin: 10px;
+        }
+
+        /* نافذة البريد الإلكتروني */
+        .email-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #222;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+        }
+
+        .email-popup input {
+            padding: 10px;
+            margin: 10px 0;
+            width: 80%;
+            background-color: #444;
+            border: none;
+            color: white;
+            border-radius: 5px;
+        }
+
+        .email-popup button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .email-popup button:hover {
+            background-color: #45a049;
+        }
+
+        /* أيقونة السلة */
+        .cart-icon {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: #ff5733;
+            color: white;
+            border-radius: 50%;
+            padding: 10px;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- صفحة تسجيل الدخول -->
+    <div class="login-page" id="login-page">
+        <div>
+            <h1>تسجيل الدخول</h1>
+            <input type="text" id="username" placeholder="اسم المستخدم" value="d">
+            <input type="password" id="password" placeholder="كلمة المرور" value="d">
+            <input type="button" value="تسجيل الدخول" onclick="checkLogin()">
+            <div id="error-message" class="error"></div>
+        </div>
+    </div>
+
+    <!-- الصفحة الرئيسية للموقع (المتجر) -->
+    <div class="black-page" id="black-page">
+        <div class="store">
+            <h1>المتجر الوهمي</h1>
+            <div class="product">
+                <img src="https://i.imgur.com/nZJ8h5w.jpg" alt="10K مشاهدة Kick">
+                <h3>10K مشاهدة Kick</h3>
+                <p>السعر: $50</p>
+                <p>التقييم: ⭐⭐⭐⭐☆</p>
+                <button onclick="addToCart('10K مشاهدة Kick', 50)">إضافة إلى السلة</button>
+            </div>
+            <div class="product">
+                <img src="https://i.imgur.com/YiUBgCZ.jpg" alt="Super Gaming Chair">
+                <h3>كرسي ألعاب سوبر</h3>
+                <p>السعر: $199</p>
+                <p>التقييم: ⭐⭐⭐⭐⭐</p>
+                <button onclick="addToCart('كرسي ألعاب سوبر', 199)">إضافة إلى السلة</button>
+            </div>
+        </div>
+
+        <div class="cart">
+            <h2>سلة التسوق</h2>
+            <div id="cart-items"></div>
+            <div class="cart-total" id="cart-total">المجموع: $0</div>
+            <div class="checkout">
+            <button onclick="showCart()">عرض السلة</button>
+        </div>
+    </div>
+
+    <!-- نافذة سلة التسوق القديمة (لتحديد العدد) -->
+    <div class="cart-popup" id="cart-popup">
+        <h2>سلة التسوق</h2>
+        <div id="cart-items"></div>
+        <div class="cart-total" id="cart-total">المجموع: $0</div>
+        <label for="quantity">العدد:</label>
+        <input type="number" id="quantity" min="1" value="1">
+        <br><br>
+        <button onclick="goToPayment()">التالي</button>
+        <button onclick="closeCart()">إغلاق</button>
+    </div>
+
+    <!-- نافذة الدفع -->
+    <div class="payment-popup" id="payment-popup">
+        <h2>الدفع</h2>
+        <p>الدفع باستخدام Bitcoin فقط</p>
+        <img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png" alt="Bitcoin" class="bitcoin-icon">
+        <p>
+            <button onclick="showEmailPopup()">إرسل طلب ليتم إرسال لك عنوان الدفع</button>
+        </p>
+    </div>
+
+    <!-- نافذة البريد الإلكتروني -->
+    <div class="email-popup" id="email-popup">
+        <h2>أدخل بريدك الإلكتروني</h2>
+        <input type="email" id="email" placeholder="البريد الإلكتروني">
+        <button onclick="sendEmail()">إرسال</button>
+    </div>
+
+    <div class="cart-icon" id="cart-icon" onclick="showCart()">🛒</div>
+
+    <script>
+        // المتغيرات الخاصة بالسلة
+        let cart = [];
+        let totalAmount = 0;
+
+        // إضافة منتج إلى السلة
+        function addToCart(productName, price) {
+            cart.push({ productName, price });
+            totalAmount += price;
+
+            document.getElementById('cart-items').innerHTML = cart.map(item => 
+                `<div class="cart-item">${item.productName} - $${item.price}</div>`
+            ).join('');
+            document.getElementById('cart-total').textContent = `المجموع: $${totalAmount}`;
+        }
+
+        // عرض نافذة سلة التسوق
+        function showCart() {
+            document.getElementById('cart-popup').style.display = 'block';
+        }
+
+        // إغلاق نافذة سلة التسوق
+        function closeCart() {
+            document.getElementById('cart-popup').style.display = 'none';
+        }
+
+        // الانتقال إلى نافذة الدفع
+        function goToPayment() {
+            document.getElementById('cart-popup').style.display = 'none';  // إغلاق سلة التسوق
+            document.getElementById('payment-popup').style.display = 'block';  // عرض نافذة الدفع
+        }
+
+        // عرض نافذة البريد الإلكتروني
+        function showEmailPopup() {
+            document.getElementById('payment-popup').style.display = 'none';  // إغلاق نافذة الدفع
+            document.getElementById('email-popup').style.display = 'block';  // عرض نافذة البريد الإلكتروني
+        }
+
+        // إرسال البريد الإلكتروني
+        function sendEmail() {
+            let email = document.getElementById('email').value;
+            alert(`تم إرسال طلبك إلى البريد الإلكتروني: ${email}`);
+            document.getElementById('email-popup').style.display = 'none';  // إغلاق نافذة البريد الإلكتروني
+        }
+
+        // التحقق من اسم المستخدم وكلمة المرور
+        function checkLogin() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // إذا كانت بيانات الدخول صحيحة
+            if (username === 'd' && password === 'd') {
+                // إخفاء صفحة تسجيل الدخول وعرض المتجر
+                document.getElementById('login-page').style.display = 'none';
+                document.getElementById('black-page').style.display = 'block';
+            } else {
+                // عرض رسالة خطأ
+                document.getElementById('error-message').textContent = 'اسم المستخدم أو كلمة المرور غير صحيحة';
+            }
+        }
+    </script>
+</body>
+</html>
